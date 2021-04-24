@@ -4,6 +4,16 @@ The Tropical Precooling Environment is an program that can be used to evaluate a
 
 
 
+TODO:
+
+* [ ] Fix the dates in the data files.
+* [ ] Document here about the changes in V2.
+  * [ ] [The negative energy costs issue](https://github.com/fzi-forschungszentrum-informatik/tropical_precooling_environment/issues/1)  
+  * [ ] The date format in the data.
+  * [ ] Report Action space, now clipped.
+
+
+
 ## Installation
 
 This is code is written in Python 3. Given that Python and pip are installed, you can install the environment by typing:
