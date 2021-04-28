@@ -278,8 +278,9 @@ class TropicalPrecooling():
         ----------
         actions : numpy array with shape (156,)
             Temperature setpoints for every 5 minute slot between 4am and 5pm.
-            The actual building doesn't support setpoints below 13°C. Setpoints
-            can also be set to None which is interpreted as AC off.
+            The actual building doesn't support setpoints below 10°C. Setpoints
+            can also be set to None which is interpreted as AC off. Setpoints
+            above 35°C will be interpreted as AC off.
 
         Returns
         -------
@@ -521,4 +522,3 @@ class TropicalPrecooling():
         # This is a simple linear fit through two points.
         PMV = (0.5 - -0.5) / (T_max_comfort - T_min_comfort) * (T_z - T_min_comfort) + -0.5
         return PMV
-

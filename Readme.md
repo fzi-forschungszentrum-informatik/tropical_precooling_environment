@@ -2,15 +2,7 @@
 
 The Tropical Precooling Environment is an program that can be used to evaluate and benchmark building energy optimization algorithms. For more details and background please see the accompanying [paper](https://dl.acm.org/doi/10.1145/3408308.3427614).
 
-
-
-TODO:
-
-* [ ] Fix the dates in the data files.
-* [ ] Document here about the changes in V2.
-  * [ ] [The negative energy costs issue](https://github.com/fzi-forschungszentrum-informatik/tropical_precooling_environment/issues/1)  
-  * [ ] The date format in the data.
-  * [ ] Report Action space, now clipped.
+Please note: the current version of the environment is V2. The performance results computed with the current state are not directly comparable with previous versions due to major changes in the environment logic. See Changelog below for details.
 
 
 
@@ -50,11 +42,9 @@ This should should generate the following output:
 Performance was: 0.0
 ```
 
-
-
 Please see the paper, especially section 5.1, for more details about the environment concepts. Further documentation about implementation and how to interact with the environment are provided within [tropical_precooling/env.py](tropical_precooling/env.py).
 
-
+### Intended Usage
 
 The intended usage of the environment is the evaluate or benchmark algorithms for building energy optimization in the following way:
 
@@ -115,8 +105,12 @@ print("Performance was: %s" % env.compute_performance_measure())
 The code above outputs the following, which means that tested algorithm achieves a ~20% improvement in thermal comfort and energy costs compared to the baseline strategy.
 
 ```
-Performance was: 0.20432590993516558
+Performance was: 0.20163148790976004
 ```
+
+### Interface
+
+As demonstrated above, the intended interaction with the environment should happen only by calling the `get_training_data()`, `env.reset()`,  `env.step()` and `env.compute_performance_measure()` methods. A detailed description about the properties of the `obs` object and the expected properties of the `actions` object is provided in source code of the env, especially in the docstring of the `env.step()` method.
 
 
 
@@ -157,15 +151,16 @@ Other reference formats are provided [here](https://dl.acm.org/doi/10.1145/34083
 
 ## Changelog
 
-| Version | Description                                              |
-| ------- | -------------------------------------------------------- |
-| V1      | Initial version presented and published on BuildSys '20. |
+| Version | Description                                                  |
+| ------- | ------------------------------------------------------------ |
+| V1      | Initial version presented and published on BuildSys '20.     |
+| V2      | Fix [negative energy cost issue](https://github.com/fzi-forschungszentrum-informatik/tropical_precooling_environment/issues/1). Also fix the the dates in the building data and clip the action space to realistic values. |
 
 
 
 ## Contact
 
-Please feel free to contact [David Wölfle](https://www.fzi.de/en/about-us/organisation/detail/address/david-woelfle/) for all inquiries.
+Please open an issue here on GitHub for any question or remark regarding the implementation. Please feel free to contact [David Wölfle](https://www.fzi.de/en/about-us/organisation/detail/address/david-woelfle/) for all other inquiries.
 
 
 
