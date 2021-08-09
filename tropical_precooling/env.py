@@ -140,6 +140,10 @@ class TropicalPrecooling():
             # next timestep.
             #
             m_s_t = m_so + k_c * (T_z_t - T_zSP_t)  # (5)
+            # Prevent negative energy prices if the agent sets the setpoint
+            # above the current temperature. See for dicussion:
+            # https://github.com/fzi-forschungszentrum-informatik/tropical_precooling_environment/issues/1
+            m_s_t = np.clip(m_s_t, 0, None)
             Q_cooling_t = c_pa * (m_s_t * (T_s_t - T_z_t))  # (4)
 
             # Now cooling/heating if AC is switched of.
@@ -274,8 +278,9 @@ class TropicalPrecooling():
         ----------
         actions : numpy array with shape (156,)
             Temperature setpoints for every 5 minute slot between 4am and 5pm.
-            The actual building doesn't support setpoints below 13°C. Setpoints
-            can also be set to None which is interpreted as AC off.
+            The actual building doesn't support setpoints below 10°C. Setpoints
+            can also be set to None which is interpreted as AC off. Setpoints
+            above 35°C will be interpreted as AC off.
 
         Returns
         -------
@@ -303,6 +308,13 @@ class TropicalPrecooling():
             for the user of the environment. This field is kept for consistency
             with OpenAI gym conventions.
         """
+        # Restrict setpoints to values that are tyical for AC systems.
+        # Setting this to crazy high/low values will anyway yield bad
+        # performance measures. However, without the cliping some numerical
+        # instabilties may occure.
+        actions = np.clip(actions, 10, None)
+        # Any setpoint then 35°C is interpreted as leave AC of.
+        actions[actions>35] = None
 
         reward = None
         done = False
@@ -467,6 +479,7 @@ class TropicalPrecooling():
         # The variables have no trailing _t (reresenting the (t) in the
         # equations as these are arrays that hold may of these variables.
         m_s = m_so + k_c * (T_z - T_zSP)  # (5)
+        m_s = np.clip(m_s, 0, None)
         Q_cooling = c_pa * (m_s * (T_s - T_z))  # (4)
 
         # Set cooling power to zero if AC was off.
@@ -509,4 +522,3 @@ class TropicalPrecooling():
         # This is a simple linear fit through two points.
         PMV = (0.5 - -0.5) / (T_max_comfort - T_min_comfort) * (T_z - T_min_comfort) + -0.5
         return PMV
-
